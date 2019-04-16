@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+    <properties>
+        <property name="log-path">D:/logs/data</property>
+        <property name="log-file-name">data-transmission</property>
+    </properties>
+    <appenders>
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d] [%-5p] [%t] %C （%F:%L） - %m%n"/>
+        </Console>
+
+        <RollingFile name="INFO_PROD" fileName="${log-path}/${log-file-name}.log"
+                     filePattern="${log-path}/$${date:yyyy-MM}/${log-file-name}-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="[%d] [%-5p]  %C （%F:%L） - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+        </RollingFile>
+    </appenders>
+
+
+    <loggers>
+        <Root level="debug">
+            <AppenderRef ref="stdout"/>
+            <!--<AppenderRef ref="INFO_PROD"/>-->
+        </Root>
+    </loggers>
+</Configuration>
