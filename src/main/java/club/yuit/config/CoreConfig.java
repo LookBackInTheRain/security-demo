@@ -1,14 +1,15 @@
 package club.yuit.config;
 
+import club.yuit.filter.BootFilter;
+import club.yuit.filter.TestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.filter.DelegatingFilterProxy;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import javax.servlet.*;
+import java.util.EnumSet;
 
 /**
  * @author yuit
@@ -18,13 +19,27 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class CoreConfig {
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Autowired(required = false)
-    public void tConfig(){
-        System.out.println("------------------------------>");
+    public void tConfig(ServletContext context) {
+        TestFilter filter = new TestFilter();
+        FilterRegistration.Dynamic registration = context.addFilter("testFilter", filter);
+        EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.FORWARD,DispatcherType.REQUEST,DispatcherType.ASYNC);
+        registration.addMappingForUrlPatterns(dispatcherTypes,false,"/*");
     }
+
+
+    @Autowired
+    public void bootFilter(ServletContext context){
+        BootFilter filter = new BootFilter();
+        FilterRegistration.Dynamic registration = context.addFilter("bootFilter", filter);
+        EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.FORWARD,DispatcherType.REQUEST,DispatcherType.ASYNC);
+        registration.addMappingForUrlPatterns(dispatcherTypes,false,"/*");
+    }
+
+
 
 }

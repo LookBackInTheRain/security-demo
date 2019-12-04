@@ -21,7 +21,7 @@
 
 
     <loggers>
-        <Root level="debug">
+        <Root level="info">
             <AppenderRef ref="stdout"/>
             <!--<AppenderRef ref="INFO_PROD"/>-->
         </Root>
